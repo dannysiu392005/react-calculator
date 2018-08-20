@@ -4,12 +4,117 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       screenV: '0',
       op1: '0',
       op2: null,
       opr: null
     };
+    
+    this.handleClick = this.handleClick.bind(this);
+  }
+  
+  handleClick(i) {
+    if (i === "C") { // Reset the state
+      this.setState({
+        screenV: '0',
+        op1: '0',
+        op2: null,
+        opr: null
+      });
+    } else if ("0123456789".indexOf(i) !== -1) {
+      if (this.state.opr === null) {
+        let newV = '';
+        if (this.state.op1 === '0') {
+          newV = i;
+        } else {
+          newV = this.state.op1 + i;
+        }
+        this.setState({
+          screenV: newV,
+          op1: newV
+        });
+      } else {
+        let newV = '';
+        if (this.state.op2 === null) {
+          newV = i;
+        } else {
+          newV = this.state.op2 + i;
+        }
+        this.setState({
+          screenV: newV,
+          op2: newV
+        });
+      }
+    } else if ("+-x÷".indexOf(i) !== -1) {
+      if (this.state.op2 === null) {
+        this.setState({ opr: i });
+      }
+    } else if (i === "=") {
+      if (this.state.op2 && this.state.opr) {
+        let result = calculateResult(this.state);
+        this.setState({
+          screenV: result,
+          op1: result,
+          op2: null,
+          opr: null
+        });
+      }
+    } else if (i === "+/-") {
+      if (this.state.opr === null) {
+        let newV = (Number(this.state.op1)*-1).toString();
+        this.setState({
+          screenV: newV,
+          op1: newV
+        });
+      } else if (!(this.state.op2===null)) {
+        let newV = (Number(this.state.op2)*-1).toString();
+        this.setState({
+          screenV: newV,
+          op1: newV
+        });
+      }
+    } else if (i === "%") {
+      if (this.state.opr === null) {
+        let newV = (Number(this.state.op1)/100).toString();
+        this.setState({
+          screenV: newV,
+          op1: newV
+        });
+      } else if (!(this.state.op2===null)) {
+        let newV = (Number(this.state.op2)/100).toString();
+        this.setState({
+          screenV: newV,
+          op1: newV
+        });
+      }
+    } else { // i.e. the input is .
+      if (this.state.opr === null) {
+        if (this.state.screenV.indexOf(".") === -1) {
+          let newV = this.state.op1 + '.';
+          this.setState({
+            screenV: newV,
+            op1: newV
+          });
+        }
+      } else {
+        if (this.state.op2 === null) {
+          this.setState({
+            screenV: "0.",
+            op2: "0."
+          });
+        } else {
+          if (this.state.op2.indexOf(".") === -1) {
+            let newV = this.state.op2 + ".";
+            this.setState({
+              screenV: newV,
+              op2: newV
+            });
+          }
+        }
+      }
+    }
   }
 
   render() {
@@ -76,6 +181,24 @@ class Button extends Component {
         {this.props.value}
       </button>
     );
+  }
+}
+
+var calculateResult = (state) => {
+  let op1 = state.op1;
+  let op2 = state.op2;
+  let opr = state.opr;
+  if (opr === "+") {
+    return (Number(op1)+Number(op2)).toString();
+  }
+  if (opr === "-") {
+    return (Number(op1)-Number(op2)).toString();
+  }
+  if (opr === "x") {
+    return (Number(op1)*Number(op2)).toString();
+  }
+  if (opr === "÷") {
+    return (Number(op1)/Number(op2)).toString();
   }
 }
 
