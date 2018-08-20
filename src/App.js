@@ -2,10 +2,20 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      screenV: '0',
+      op1: '0',
+      op2: null,
+      opr: null
+    };
+  }
+
   render() {
     return (
       <div className="App">
-        <Screen value="0" />
+        <Screen value={this.state.screenV} />
         <Panel />
       </div>
     );
