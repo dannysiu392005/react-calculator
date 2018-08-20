@@ -121,7 +121,7 @@ class App extends Component {
     return (
       <div className="App">
         <Screen value={this.state.screenV} />
-        <Panel />
+        <Panel onClick={(i) => this.handleClick(i)} />
       </div>
     );
   }
@@ -141,11 +141,11 @@ class Panel extends Component {
   render() {
     return (
       <div className="Panel">
-        <PanelRow value={["C", "+/-", "%", "÷"]} />
-        <PanelRow value={["7", "8", "9", "x"]} />
-        <PanelRow value={["4", "5", "6", "-"]} />
-        <PanelRow value={["1", "2", "3", "+"]} />
-        <PanelRow value={["0", ".", "="]} />
+        <PanelRow value={["C", "+/-", "%", "÷"]} onClick={this.props.onClick}/>
+        <PanelRow value={["7", "8", "9", "x"]} onClick={this.props.onClick}/>
+        <PanelRow value={["4", "5", "6", "-"]} onClick={this.props.onClick}/>
+        <PanelRow value={["1", "2", "3", "+"]} onClick={this.props.onClick}/>
+        <PanelRow value={["0", ".", "="]} onClick={this.props.onClick}/>
       </div>
     );
   }
@@ -153,7 +153,7 @@ class Panel extends Component {
 
 class PanelRow extends Component {
   render() {
-    let buttonList = this.props.value.map(button => <Button value={button} key={button} />);  // Keys help React identify which items have changed, are added, or are removed.
+    let buttonList = this.props.value.map(button => <Button value={button} key={button} onClick={() => this.props.onClick(button)} />);  // Keys help React identify which items have changed, are added, or are removed.
     return (
       <div className="PanelRow">
         {buttonList}
@@ -177,7 +177,7 @@ class Button extends Component {
     }
 
     return (
-      <button className={className}>
+      <button className={className} onClick={this.props.onClick}>
         {this.props.value}
       </button>
     );
