@@ -1,3 +1,23 @@
+$break-extra-small: 541px;
+$break-medium: 992px;
+
+:root {
+  font-size: 62.5%;
+}
+
+@mixin font-size($sizeValue: 1) {
+  font-size: ($sizeValue * 10) + px;
+  font-size: $sizeValue + rem;
+}
+
+@mixin breakpoint($media) {
+  @if $media == extra-small-only {
+    @media only screen and (max-width: ($break-extra-small - 1px)) { @content; }
+  } @else if $media == medium-only {
+    @media only screen and (max-width: ($break-medium - 1px)) { @content; }
+  }
+}
+
 .App {
   display: flex;
   flex-flow: column nowrap;
@@ -10,7 +30,11 @@
   text-align: right;
   background-color: black;
   color: white;
-  font-size: 12vw;
+  font-size: 10vw;
+  @include breakpoint(medium-only) {
+    @include font-size(13);
+  }
+  overflow-x: auto;
 }
 
 .Panel {
@@ -28,7 +52,10 @@
 button {
   flex: 1 1 10px;
   background-color: dimgray;
-  font-size: 5vw;
+  font-size: 6vw;
+  @include breakpoint(medium-only) {
+    @include font-size(6);
+  }
   color: white;
   margin: 0;
   padding: 0px;
